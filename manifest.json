@@ -1,0 +1,22 @@
+{
+  "name": "LexCampus Legal Research",
+  "short_name": "LexCampus",
+  "description": "Premium legal research platform for dictionaries, maxims, and local judgments.",
+  "start_url": "/index.html",
+  "display": "standalone",
+  "orientation": "any",
+  "theme_color": "#1e40af",
+  "background_color": "#f0f2f5",
+  "icons": [
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <meta name="description" content="LexCampus — Professional Legal Research for Campus Courts." />
+  <meta name="theme-color" content="#1e40af" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="LexCampus" />
+  <title>LexCampus — Legal Research</title>
+  <link rel="manifest" href="manifest.json" />
+  <link rel="apple-touch-icon" href="icons/icon-192.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,700;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ===== HEADER ===== -->
+  <header class="app-header" id="app-header">
+    <div class="header-inner">
+      <div class="brand">
+        <span class="brand-icon">⚖</span>
+        <span class="brand-name">LexCampus</span>
+      </div>
+      <div class="header-actions">
+        <span class="offline-badge" id="offline-badge">OFFLINE</span>
+        <button class="icon-btn" id="menu-btn" aria-label="Menu">☰</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ===== SCREENS ===== -->
+  <main class="screen-container">
+
+    <!-- SEARCH SCREEN -->
+    <section class="screen active" id="screen-search">
+      <div class="search-hero">
+        <h1 class="hero-title">Search the Archive.</h1>
+        <p class="hero-sub">Keyword-search across all SU Court &amp; LSS Court judgments.</p>
+        <div class="search-box">
+          <span class="search-icon">🔍</span>
+          <input type="text" id="search-input" class="search-input" placeholder="Search by keyword, party, or legal issue…" autocomplete="off" />
+          <button class="clear-btn" id="clear-search" aria-label="Clear search">✕</button>
+        </div>
+        <div class="quick-filters">
+          <span class="filter-label">QUICK FILTERS</span>
+          <div class="filter-chips">
+            <button class="chip active" data-filter="all">All</button>
+            <button class="chip" data-filter="SU Court">SU Court</button>
+            <button class="chip" data-filter="LSS Court">LSS Court</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Search Results -->
+      <div class="results-container" id="search-results" style="display:none;">
+        <div class="results-header">
+          <span id="results-count">0 results</span>
+          <span id="results-query"></span>
+        </div>
+        <div class="results-list" id="results-list"></div>
+      </div>
+
+      <!-- Empty State -->
+      <div class="feature-cards" id="feature-cards">
+        <div class="feature-card">
+          <div class="feature-icon">📜</div>
+          <h3>Case Archive</h3>
+          <p>Access all uploaded SU Court and LSS Court judgments from your institution.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">⚡</div>
+          <h3>Keyword Discovery</h3>
+          <p>Search by fact, party name, legal principle, or any keyword found in the judgment.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">📖</div>
+          <h3>Legal Toolkit</h3>
+          <p>100 legal maxims and a full A–Z law dictionary — always at your fingertips.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- LIBRARY SCREEN -->
+    <section class="screen" id="screen-library">
+      <div class="screen-header">
+        <h2 class="screen-title">Case Library</h2>
+        <p class="screen-sub">All uploaded judgments</p>
+      </div>
+      <div class="library-filters">
+        <button class="chip active" data-lib-filter="all">All Courts</button>
+        <button class="chip" data-lib-filter="SU Court">SU Court</button>
+        <button class="chip" data-lib-filter="LSS Court">LSS Court</button>
+      </div>
+      <div class="case-list" id="library-list">
+        <div class="empty-state" id="library-empty">
+          <div class="empty-icon">📂</div>
+          <p>No cases uploaded yet.</p>
+          <p class="empty-sub">Tap the <strong>+</strong> button to import a judgment PDF.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- TOOLKIT SCREEN -->
+    <section class="screen" id="screen-toolkit">
+      <div class="screen-header">
+        <h2 class="screen-title">Legal Toolkit</h2>
+        <p class="screen-sub">A curated repository of legal principles and terminology.</p>
+      </div>
+
+      <!-- Term of the Day -->
+      <div class="totd-card" id="totd-card">
+        <div class="totd-label">TERM OF THE DAY</div>
+        <div class="totd-term" id="totd-term">Amicus Curiae</div>
+        <div class="totd-def" id="totd-def">An impartial adviser, often voluntary, to a court of law in a particular case.</div>
+        <button class="totd-explore" id="totd-explore">Explore full entry →</button>
+      </div>
+
+      <!-- Toolkit Tabs -->
+      <div class="toolkit-tabs">
+        <button class="tk-tab active" data-tk="maxims" id="tab-maxims">⚖ Legal Maxims</button>
+        <button class="tk-tab" data-tk="dictionary" id="tab-dictionary">📖 A–Z Dictionary</button>
+      </div>
+
+      <!-- Toolkit Search -->
+      <div class="toolkit-search-wrap">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="toolkit-search" class="search-input" placeholder="Search maxims or legal terms…" />
+      </div>
+
+      <!-- Maxims Panel -->
+      <div class="toolkit-panel active" id="panel-maxims">
+        <div class="maxims-list" id="maxims-list"></div>
+      </div>
+
+      <!-- Dictionary Panel -->
+      <div class="toolkit-panel" id="panel-dictionary">
+        <div class="az-nav" id="az-nav"></div>
+        <div class="dict-list" id="dict-list"></div>
+      </div>
+    </section>
+
+    <!-- NOTES SCREEN -->
+    <section class="screen" id="screen-notes">
+      <div class="screen-header-row">
+        <div>
+          <h2 class="screen-title">Case Notes</h2>
+          <p class="screen-sub">Your private notes &amp; hearing dates</p>
+        </div>
+        <button class="btn-primary-sm" id="new-note-btn">+ New Note</button>
+      </div>
+
+      <div class="notes-list" id="notes-list">
+        <div class="empty-state" id="notes-empty">
+          <div class="empty-icon">🗒️</div>
+          <p>No notes yet.</p>
+          <p class="empty-sub">Tap <strong>+ New Note</strong> to start.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- GAMES SCREEN -->
+    <section class="screen" id="screen-games">
+      <div class="screen-header">
+        <h2 class="screen-title">Maxim Master</h2>
+        <p class="screen-sub">Test your knowledge of legal maxims & terms.</p>
+      </div>
+
+      <div class="game-quiz-container" id="game-area">
+        <div class="game-card" id="game-card">
+          <div class="game-meta">
+            <span class="game-level">LEVEL 1</span>
+            <span class="game-score">Score: <strong id="game-score-val">0</strong></span>
+          </div>
+          
+          <div class="game-question-box">
+            <div class="game-label">LATIN PHRASE</div>
+            <div class="game-latin-text" id="game-latin-text">...</div>
+            <p class="game-instruction">Choose the correct English meaning:</p>
+          </div>
+
+          <div class="game-options" id="game-options">
+            <!-- Dynamically populated buttons -->
+          </div>
+
+          <div class="game-feedback-pill" id="game-feedback"></div>
+        </div>
+
+        <div class="game-actions">
+          <button class="btn-outline" id="game-reset-btn">Reset Progress</button>
+          <div class="game-stats-row">
+            <span>Accuracy: <strong id="game-acc-val">0%</strong></span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ===== BOTTOM NAV ===== -->
+  <nav class="bottom-nav" id="bottom-nav">
+    <button class="nav-item active" data-screen="search" id="nav-search">
+      <span class="nav-icon">🔍</span>
+      <span class="nav-label">Search</span>
+    </button>
+    <button class="nav-item" data-screen="library" id="nav-library">
+      <span class="nav-icon">📚</span>
+      <span class="nav-label">Library</span>
+    </button>
+    <button class="nav-item" data-screen="toolkit" id="nav-toolkit">
+      <span class="nav-icon">⚖</span>
+      <span class="nav-label">Toolkit</span>
+    </button>
+    <button class="nav-item" data-screen="notes" id="nav-notes">
+      <span class="nav-icon">🗒️</span>
+      <span class="nav-label">Notes</span>
+    </button>
+    <button class="nav-item" data-screen="games" id="nav-games">
+      <span class="nav-icon">🎮</span>
+      <span class="nav-label">Quiz</span>
+    </button>
+  </nav>
+
+
+
+  <!-- ===== MODALS ===== -->
+
+  <!-- Case Detail Modal -->
+  <div class="modal-overlay" id="modal-case" role="dialog" aria-modal="true" aria-labelledby="case-modal-title">
+    <div class="modal modal-large">
+      <div class="modal-header">
+        <h3 id="case-modal-title">Case Detail</h3>
+        <button class="modal-close" data-close="modal-case">✕</button>
+      </div>
+      <div class="modal-body" id="case-detail-body">
+        <!-- dynamically populated -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Note Modal -->
+  <div class="modal-overlay" id="modal-note" role="dialog" aria-modal="true" aria-labelledby="note-modal-title">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 id="note-modal-title">New Note</h3>
+        <button class="modal-close" data-close="modal-note">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label class="form-label" for="note-title">Title</label>
+          <input type="text" id="note-title" class="form-input" placeholder="e.g. Hearing prep for Bello v. SU" />
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="note-date">Date / Hearing Date</label>
+          <input type="date" id="note-date" class="form-input" />
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="note-case">Linked Case (optional)</label>
+          <select id="note-case" class="form-input">
+            <option value="">— Select a case —</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="note-content">Notes</label>
+          <textarea id="note-content" class="form-input form-textarea form-textarea-lg" placeholder="Type your notes here…"></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-outline" data-close="modal-note">Cancel</button>
+        <button class="btn-primary" id="save-note-btn">Save Note</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Maxim / Dictionary Detail Modal -->
+  <div class="modal-overlay" id="modal-toolkit-detail" role="dialog" aria-modal="true" aria-labelledby="toolkit-detail-title">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 id="toolkit-detail-title">Detail</h3>
+        <button class="modal-close" data-close="modal-toolkit-detail">✕</button>
+      </div>
+      <div class="modal-body" id="toolkit-detail-body"></div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
+
+  <!-- ===== SCRIPTS ===== -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+  <script>pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';</script>
+  <script src="data/maxims.js"></script>
+  <script src="data/dictionary.js"></script>
+  <script src="data/cases.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
