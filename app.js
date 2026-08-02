@@ -103,9 +103,8 @@ async function loadAndIndexCases() {
   for (const c of CASES) {
     const text = await extractFileText(c);
     // Try to guess court from filename
-    let court = 'General Court';
+    let court = 'SU Court';
     if (c.filename.toUpperCase().includes('LSS')) court = 'LSS Court';
-    if (c.filename.toUpperCase().includes('SU ') || c.filename.toUpperCase().includes('SU_')) court = 'SU Court';
 
     loadedCases.push({
       id: c.filename,

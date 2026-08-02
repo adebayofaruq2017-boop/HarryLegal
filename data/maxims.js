@@ -1199,5 +1199,355 @@ const LEGAL_MAXIMS = [
     meaning: "A deep lack of legal knowledge among a population is a systemic challenge for the rule of law.",
     area: "Jurisprudence",
     tags: ["ignorance", "rule of law", "knowledge"]
+  },
+  {
+    id: 151,
+    latin: "Executio juris non habet injuriam",
+    english: "The execution of law does no injury",
+    meaning: "An act carried out in accordance with valid legal authority cannot be the basis for a claim of harm or injury.",
+    area: "General Law"
+  },
+  {
+    id: 152,
+    latin: "Ex nudo pacto non oritur actio",
+    english: "No action arises from a bare agreement",
+    meaning: "A promise made without consideration (something of value exchanged) is not legally enforceable.",
+    area: "Contracts"
+  },
+  {
+    id: 153,
+    latin: "Ex turpi causa non oritur actio",
+    english: "No action arises from a shameful cause",
+    meaning: "A person cannot maintain a legal action if it is based on their own illegal or immoral act.",
+    area: "General Law"
+  },
+  {
+    id: 154,
+    latin: "Expressio unius est exclusio alterius",
+    english: "The expression of one thing is the exclusion of the other",
+    meaning: "In statutory interpretation, when certain things are specifically mentioned, it implies that others are excluded.",
+    area: "Statutory Interpretation"
+  },
+  {
+    id: 155,
+    latin: "Falsa demonstratio non nocet",
+    english: "A false description does not harm",
+    meaning: "An error in the description of a person or thing does not invalidate a document if the intent is clear.",
+    area: "Evidence"
+  },
+  {
+    id: 156,
+    latin: "Fiat justitia ruat caelum",
+    english: "Let justice be done though the heavens fall",
+    meaning: "Justice must be administered regardless of the consequences.",
+    area: "Jurisprudence"
+  },
+  {
+    id: 157,
+    latin: "Fractionem diei non recipit lex",
+    english: "The law does not recognize fractions of a day",
+    meaning: "In legal contexts, a day is generally treated as an indivisible unit of time.",
+    area: "General Law"
+  },
+  {
+    id: 158,
+    latin: "Generalia specialibus non derogant",
+    english: "General things do not derogate from special things",
+    meaning: "A general statute does not override an earlier, more specific statute unless it explicitly says so.",
+    area: "Statutory Interpretation"
+  },
+  {
+    id: 159,
+    latin: "Habeas corpus",
+    english: "You shall have the body",
+    meaning: "A writ used to bring a person before a court to determine if their detention is lawful.",
+    area: "Constitutional Law"
+  },
+  {
+    id: 160,
+    latin: "Ignorantia juris non excusat",
+    english: "Ignorance of the law does not excuse",
+    meaning: "Not knowing a law is not a valid defense for breaking it.",
+    area: "Criminal Law"
+  },
+  {
+    id: 161,
+    latin: "In camera",
+    english: "In the chamber",
+    meaning: "Legal proceedings held in private, usually in the judge's office or with the public excluded.",
+    area: "Procedural Law"
+  },
+  {
+    id: 162,
+    latin: "In limine",
+    english: "At the threshold",
+    meaning: "A motion discussed at the very beginning of a trial, often to exclude certain evidence.",
+    area: "Evidence"
+  },
+  {
+    id: 163,
+    latin: "In loco parentis",
+    english: "In the place of a parent",
+    meaning: "The legal responsibility of a person or organization to take on some of the functions and responses of a parent.",
+    area: "Family Law"
+  },
+  {
+    id: 164,
+    latin: "In pari delicto",
+    english: "In equal fault",
+    meaning: "When both parties to a dispute are equally at fault, the court will generally leave them where it finds them.",
+    area: "General Law"
+  },
+  {
+    id: 165,
+    latin: "In personam",
+    english: "Against the person",
+    meaning: "Legal actions or jurisdictions directed toward a specific individual (contrast with in rem).",
+    area: "Procedural Law"
+  },
+  {
+    id: 166,
+    latin: "In rem",
+    english: "Against the thing",
+    meaning: "Legal actions directed toward a specific piece of property (contrast with in personam).",
+    area: "Procedural Law"
+  },
+  {
+    id: 167,
+    latin: "Inter alia",
+    english: "Among other things",
+    meaning: "Used when providing examples or a partial list of items.",
+    area: "General Law"
+  },
+  {
+    id: 168,
+    latin: "Inter vivos",
+    english: "Between living persons",
+    meaning: "Transactions or gifts made during the lifetime of the participants.",
+    area: "Property Law"
+  },
+  {
+    id: 169,
+    latin: "Interest reipublicae ut sit finis litium",
+    english: "It is in the interest of the state that there be an end to litigation",
+    meaning: "The principle that legal disputes should be resolved conclusively to maintain social order and efficiency.",
+    area: "General Law"
+  },
+  {
+    id: 170,
+    latin: "Ipsissima verba",
+    english: "The very words",
+    meaning: "A precise, word-for-word quotation or transcript.",
+    area: "Evidence"
+  },
+  {
+    id: 171,
+    latin: "Ipso facto",
+    english: "By the fact itself",
+    meaning: "A result that occurs automatically as the direct consequence of an action or event.",
+    area: "General Law"
+  },
+  {
+    id: 172,
+    latin: "Jus cogens",
+    english: "Compelling law",
+    meaning: "Fundamental principles of international law from which no nation is permitted to depart.",
+    area: "International Law"
+  },
+  {
+    id: 173,
+    latin: "Lex loci delicti",
+    english: "The law of the place where the wrong was committed",
+    meaning: "The principle that the law of the jurisdiction where an injury occurred should apply to the case.",
+    area: "Conflict of Laws"
+  },
+  {
+    id: 174,
+    latin: "Lex talionis",
+    english: "The law of retaliation",
+    meaning: "The principle of 'an eye for an eye,' where the punishment matches the crime.",
+    area: "Criminal Law"
+  },
+  {
+    id: 175,
+    latin: "Locus standi",
+    english: "Place of standing",
+    meaning: "The right or capacity of a party to bring an action or to appear in a court.",
+    area: "Procedural Law"
+  },
+  {
+    id: 176,
+    latin: "Mala fides",
+    english: "Bad faith",
+    meaning: "Intentional dishonesty or a lack of sincerity in dealings.",
+    area: "General Law"
+  },
+  {
+    id: 177,
+    latin: "Mens rea",
+    english: "Guilty mind",
+    meaning: "The mental intent or state of mind required to constitute a crime.",
+    area: "Criminal Law"
+  },
+  {
+    id: 178,
+    latin: "Mobilia sequuntur personam",
+    english: "Moveables follow the person",
+    meaning: "The principle that personal property is governed by the law of the owner's domicile.",
+    area: "Property Law"
+  },
+  {
+    id: 179,
+    latin: "Nemo dat quod non habet",
+    english: "No one gives what they do not have",
+    meaning: "A person cannot transfer a better title to property than they themselves possess.",
+    area: "Commercial Law"
+  },
+  {
+    id: 180,
+    latin: "Nemo debet bis vexari pro una et eadem causa",
+    english: "No one should be twice troubled for the same cause",
+    meaning: "The principle against double jeopardy—a person cannot be tried twice for the same offense.",
+    area: "Criminal Law"
+  },
+  {
+    id: 181,
+    latin: "Nemo debet esse judex in propria causa",
+    english: "No one should be a judge in their own case",
+    meaning: "The principle of natural justice that ensures impartiality in decision-making.",
+    area: "Administrative Law"
+  },
+  {
+    id: 182,
+    latin: "Nemo est haeres viventis",
+    english: "No one is the heir of a living person",
+    meaning: "A person's heirs can only be determined upon their death.",
+    area: "Property Law"
+  },
+  {
+    id: 183,
+    latin: "Nemo tenetur seipsum accusare",
+    english: "No one is bound to accuse themselves",
+    meaning: "The privilege against self-incrimination.",
+    area: "Criminal Law"
+  },
+  {
+    id: 184,
+    latin: "Nihil debent",
+    english: "They owe nothing",
+    meaning: "A plea in a debt action claiming that no debt exists.",
+    area: "Contracts"
+  },
+  {
+    id: 185,
+    latin: "Nisi prius",
+    english: "Unless before",
+    meaning: "A matter that will proceed as planned unless a court decides otherwise beforehand.",
+    area: "Procedural Law"
+  },
+  {
+    id: 186,
+    latin: "Non compos mentis",
+    english: "Not of sound mind",
+    meaning: "Lacking the mental capacity to handle one's affairs or be held legally liable.",
+    area: "General Law"
+  },
+  {
+    id: 187,
+    latin: "Non constat",
+    english: "It does not follow",
+    meaning: "Evidence or an argument that is not conclusive or does not logically lead to a specific result.",
+    area: "Evidence"
+  },
+  {
+    id: 188,
+    latin: "Non est factum",
+    english: "It is not my deed",
+    meaning: "A defense in contract law where a person claims they signed a document under a fundamental mistake about its nature.",
+    area: "Contracts"
+  },
+  {
+    id: 189,
+    latin: "Non sequitur",
+    english: "It does not follow",
+    meaning: "A conclusion or statement that does not logically follow from the previous argument or evidence.",
+    area: "General Law"
+  },
+  {
+    id: 190,
+    latin: "Noscitur a sociis",
+    english: "It is known by its associates",
+    meaning: "A rule of interpretation where a word's meaning is derived from the context of surrounding words.",
+    area: "Statutory Interpretation"
+  },
+  {
+    id: 191,
+    latin: "Novus actus interveniens",
+    english: "A new intervening act",
+    meaning: "An event that breaks the chain of causation between an original act of negligence and the resulting harm.",
+    area: "Tort Law"
+  },
+  {
+    id: 192,
+    latin: "Nullum crimen sine lege",
+    english: "No crime without a law",
+    meaning: "A person cannot be punished for an act that was not prohibited by law at the time it was committed.",
+    area: "Criminal Law"
+  },
+  {
+    id: 193,
+    latin: "Obiter dictum",
+    english: "A thing said in passing",
+    meaning: "A judge's expression of opinion which is not essential to the decision and not binding as precedent.",
+    area: "Jurisprudence"
+  },
+  {
+    id: 194,
+    latin: "Onerandi",
+    english: "Of burden",
+    meaning: "Pertaining to a burden or obligation.",
+    area: "General Law"
+  },
+  {
+    id: 195,
+    latin: "Onus probandi",
+    english: "The burden of proof",
+    meaning: "The obligation of a party to prove the facts they are asserting.",
+    area: "Evidence"
+  },
+  {
+    id: 196,
+    latin: "Pacta sunt servanda",
+    english: "Agreements must be kept",
+    meaning: "The fundamental principle that contracts and international treaties are binding.",
+    area: "International Law"
+  },
+  {
+    id: 197,
+    latin: "Pari passu",
+    english: "With equal step",
+    meaning: "Creditors or claimants who are entitled to receive payment at the same rate and priority.",
+    area: "Commercial Law"
+  },
+  {
+    id: 198,
+    latin: "Pendente lite",
+    english: "While litigation is pending",
+    meaning: "Actions taken or orders issued during the course of a lawsuit.",
+    area: "Procedural Law"
+  },
+  {
+    id: 199,
+    latin: "Per annum",
+    english: "By the year",
+    meaning: "Occurring or measured once every year.",
+    area: "General Law"
+  },
+  {
+    id: 200,
+    latin: "Per curiam",
+    english: "By the court",
+    meaning: "A decision issued by an appellate court in the name of the court as a whole rather than a specific judge.",
+    area: "Procedural Law"
   }
 ];
