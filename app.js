@@ -31,8 +31,8 @@ const State = {
 // STORAGE HELPERS (Only Notes now)
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 const Storage = {
-  saveNotes()  { localStorage.setItem('lc_notes', JSON.stringify(State.notes)); },
-  loadNotes()  { return JSON.parse(localStorage.getItem('lc_notes') || '[]'); },
+  saveNotes() { localStorage.setItem('lc_notes', JSON.stringify(State.notes)); },
+  loadNotes() { return JSON.parse(localStorage.getItem('lc_notes') || '[]'); },
 };
 
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -49,7 +49,7 @@ function formatDate(dateStr) {
 }
 
 function escapeHtml(str) {
-  return String(str || '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  return String(str || '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 }
 
 function highlightText(text, query) {
@@ -97,14 +97,17 @@ async function loadAndIndexCases() {
 
   State.isIndexing = true;
   showToast(`Indexing ${CASES.length} case documents...`);
-  
+
   const loadedCases = [];
-  
+
   for (const c of CASES) {
     const text = await extractFileText(c);
-    // Try to guess court from filename
+    // Try to guess court from filename or content
     let court = 'SU Court';
-    if (c.filename.toUpperCase().includes('LSS')) court = 'LSS Court';
+    if (c.filename.toUpperCase().includes('LSS') ||
+      (text && (text.includes('Law Students Society Court') || text.includes('LSSJ/') || text.includes('LSS Court')))) {
+      court = 'LSS Court';
+    }
 
     loadedCases.push({
       id: c.filename,
@@ -119,7 +122,7 @@ async function loadAndIndexCases() {
 
   State.cases = loadedCases;
   State.isIndexing = false;
-  
+
   renderLibrary();
   populateNoteCaseSelect();
   showToast("PDF Indexing Complete ✓");
@@ -133,17 +136,17 @@ function getKeywordSnippet(text, query) {
   const lq = query.toLowerCase();
   const lowerText = text.toLowerCase();
   const index = lowerText.indexOf(lq);
-  
+
   if (index === -1) return text.substring(0, 150) + '...';
-  
+
   // Grab a 120 character window around the match
   const start = Math.max(0, index - 50);
   const end = Math.min(text.length, index + query.length + 70);
-  
+
   let snippet = text.substring(start, end);
   if (start > 0) snippet = '...' + snippet;
   if (end < text.length) snippet = snippet + '...';
-  
+
   return snippet;
 }
 
@@ -209,9 +212,9 @@ document.querySelectorAll('[data-close]').forEach(btn => {
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 function buildCaseCard(c, query = '') {
   const badgeClass = c.court === 'SU Court' ? 'badge-su' : (c.court === 'LSS Court' ? 'badge-lss' : '');
-  
+
   const titleHl = query ? highlightText(c.title, query) : escapeHtml(c.title);
-  
+
   // Get contextual snippet derived from the extracted PDF text
   let summaryContent = '';
   if (query) {
@@ -220,7 +223,7 @@ function buildCaseCard(c, query = '') {
     // If no search query, show the first 120 chars as summary
     summaryContent = c.fullText ? c.fullText.substring(0, 120) + '...' : 'No text content available.';
   }
-  
+
   const summaryHl = query ? highlightText(summaryContent, query) : escapeHtml(summaryContent);
   const safeQuery = escapeHtml(query).replace(/'/g, "\\'");
 
@@ -243,10 +246,10 @@ function buildCaseCard(c, query = '') {
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 // SEARCH
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-const searchInput  = document.getElementById('search-input');
-const clearBtn     = document.getElementById('clear-search');
-const resultsWrap  = document.getElementById('search-results');
-const resultsList  = document.getElementById('results-list');
+const searchInput = document.getElementById('search-input');
+const clearBtn = document.getElementById('clear-search');
+const resultsWrap = document.getElementById('search-results');
+const resultsList = document.getElementById('results-list');
 const resultsCount = document.getElementById('results-count');
 const resultsQuery = document.getElementById('results-query');
 const featureCards = document.getElementById('feature-cards');
@@ -273,13 +276,13 @@ function showSearchEmpty() {
 function runSearch(q) {
   const lq = q.toLowerCase();
   const filter = State.currentFilter;
-  
+
   if (State.isIndexing) {
-     resultsWrap.style.display = 'block';
-     featureCards.style.display = 'none';
-     resultsCount.textContent = 'Indexing in progress...';
-     resultsList.innerHTML = '<p style="color:var(--clr-text-muted); font-size: 13px;">Please wait while cases are being scanned.</p>';
-     return;
+    resultsWrap.style.display = 'block';
+    featureCards.style.display = 'none';
+    resultsCount.textContent = 'Indexing in progress...';
+    resultsList.innerHTML = '<p style="color:var(--clr-text-muted); font-size: 13px;">Please wait while cases are being scanned.</p>';
+    return;
   }
 
   const hits = State.cases.filter(c => {
@@ -320,9 +323,9 @@ document.querySelectorAll('.chip[data-filter]').forEach(btn => {
 // LIBRARY
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 function renderLibrary() {
-  const list  = document.getElementById('library-list');
+  const list = document.getElementById('library-list');
   const empty = document.getElementById('library-empty');
-  const f     = State.currentLibFilter;
+  const f = State.currentLibFilter;
 
   const filtered = State.cases.filter(c => f === 'all' || c.court === f);
 
@@ -330,11 +333,11 @@ function renderLibrary() {
     list.innerHTML = '';
     list.appendChild(empty);
     empty.style.display = 'block';
-    
+
     if (State.isIndexing) {
-        empty.innerHTML = `<p>Indexing PDFs...</p>`;
+      empty.innerHTML = `<p>Indexing PDFs...</p>`;
     } else {
-        empty.innerHTML = `
+      empty.innerHTML = `
           <div class="empty-icon">📂</div>
           <p>No cases indexed.</p>
           <p class="empty-sub">Add PDFs to the <strong>judgments/</strong> folder and run the update script.</p>
@@ -363,7 +366,7 @@ function viewCase(id, queryHit = '') {
   if (!c) return;
 
   const badgeClass = c.court === 'SU Court' ? 'badge-su' : (c.court === 'LSS Court' ? 'badge-lss' : '');
-  
+
   document.getElementById('case-modal-title').textContent = c.court;
   document.getElementById('case-detail-body').innerHTML = `
     <div class="case-detail-title">${escapeHtml(c.title)}</div>
@@ -374,10 +377,10 @@ function viewCase(id, queryHit = '') {
     <div class="case-detail-section">
       <div class="case-detail-label">Original Document</div>
       <div class="pdf-viewer-wrap" style="display: block; height: 500px; overflow-y:auto; padding:16px; border:1px solid rgba(255,255,255,0.1); border-radius:6px; background:var(--clr-bg); line-height:1.6;">
-        ${c.path.endsWith('.txt') 
-            ? `<pre style="white-space:pre-wrap; font-family:var(--font-primary); font-size:14px; margin:0;">${queryHit ? highlightText(c.fullText, queryHit) : escapeHtml(c.fullText)}</pre>`
-            : `<iframe src="${c.path}" title="Judgment PDF" style="width:100%; height:100%;"></iframe>`
-        }
+        ${c.path.endsWith('.txt')
+      ? `<pre style="white-space:pre-wrap; font-family:var(--font-primary); font-size:14px; margin:0;">${queryHit ? highlightText(c.fullText, queryHit) : escapeHtml(c.fullText)}</pre>`
+      : `<iframe src="${c.path}" title="Judgment PDF" style="width:100%; height:100%;"></iframe>`
+    }
       </div>
     </div>
   `;
@@ -391,7 +394,7 @@ window.viewCase = viewCase;
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 function renderMaxims(query = '') {
   const list = document.getElementById('maxims-list');
-  const lq   = query.toLowerCase();
+  const lq = query.toLowerCase();
   const items = LEGAL_MAXIMS.filter(m =>
     !lq ||
     m.latin.toLowerCase().includes(lq) ||
@@ -451,7 +454,7 @@ window.filterByLetter = filterByLetter;
 
 function renderDictionary(query = '') {
   const list = document.getElementById('dict-list');
-  const lq   = query.toLowerCase();
+  const lq = query.toLowerCase();
 
   let items = LAW_DICTIONARY.filter(d =>
     !lq ||
@@ -514,7 +517,7 @@ document.querySelectorAll('.tk-tab').forEach(tab => {
   });
 });
 
-document.getElementById('toolkit-search').addEventListener('input', function() {
+document.getElementById('toolkit-search').addEventListener('input', function () {
   const q = this.value.trim();
   if (State.currentToolkit === 'maxims') renderMaxims(q);
   else renderDictionary(q);
@@ -543,7 +546,7 @@ function setTermOfDay() {
 // NOTES
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 function renderNotes() {
-  const list  = document.getElementById('notes-list');
+  const list = document.getElementById('notes-list');
   const empty = document.getElementById('notes-empty');
 
   if (State.notes.length === 0) {
@@ -602,8 +605,8 @@ function editNote(id) {
   if (!n) return;
   State.editingNoteId = id;
   document.getElementById('note-modal-title').textContent = 'Edit Note';
-  document.getElementById('note-title').value   = n.title || '';
-  document.getElementById('note-date').value    = n.date  || '';
+  document.getElementById('note-title').value = n.title || '';
+  document.getElementById('note-date').value = n.date || '';
   document.getElementById('note-content').value = n.content || '';
   populateNoteCaseSelect();
   document.getElementById('note-case').value = n.caseId || '';
@@ -621,9 +624,9 @@ function deleteNote(id) {
 window.deleteNote = deleteNote;
 
 document.getElementById('save-note-btn').addEventListener('click', () => {
-  const title   = document.getElementById('note-title').value.trim();
-  const date    = document.getElementById('note-date').value;
-  const caseId  = document.getElementById('note-case').value;
+  const title = document.getElementById('note-title').value.trim();
+  const date = document.getElementById('note-date').value;
+  const caseId = document.getElementById('note-case').value;
   const content = document.getElementById('note-content').value.trim();
 
   if (!title && !content) { showToast('Please add a title or content.'); return; }
@@ -659,7 +662,7 @@ function updateOnlineStatus() {
   if (!navigator.onLine) badge.classList.add('visible');
   else badge.classList.remove('visible');
 }
-window.addEventListener('online',  updateOnlineStatus);
+window.addEventListener('online', updateOnlineStatus);
 window.addEventListener('offline', updateOnlineStatus);
 updateOnlineStatus();
 
@@ -667,7 +670,7 @@ updateOnlineStatus();
 // SERVICE WORKER REGISTRATION
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('./sw.js').catch(() => {});
+  navigator.serviceWorker.register('./sw.js').catch(() => { });
 }
 
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -708,7 +711,7 @@ function loadNextQuestion() {
 
   const correct = allMaxims[Math.floor(Math.random() * allMaxims.length)];
   const others = allMaxims.filter(m => m.id !== correct.id).sort(() => 0.5 - Math.random()).slice(0, 3);
-  
+
   const options = [...others, correct].sort(() => 0.5 - Math.random());
 
   State.game.currentQuestion = {
@@ -723,12 +726,12 @@ function loadNextQuestion() {
 function renderGameQuestion() {
   const q = State.game.currentQuestion;
   document.getElementById('game-latin-text').textContent = q.latin;
-  
+
   const container = document.getElementById('game-options');
   container.innerHTML = q.options.map(opt => `
     <button class="game-opt-btn" onclick="checkAnswer('${opt.replace(/'/g, "\\'")}')">${escapeHtml(opt)}</button>
   `).join('');
-  
+
   document.getElementById('game-feedback').classList.remove('show', 'correct', 'wrong');
 }
 
@@ -739,7 +742,7 @@ function checkAnswer(answer) {
   State.game.total++;
   State.game.levelProgress++;
   if (isCorrect) State.game.score += 10;
-  
+
   const feedback = document.getElementById('game-feedback');
   feedback.textContent = isCorrect ? 'Correct! +10' : 'Wrong Answer!';
   feedback.classList.add('show', isCorrect ? 'correct' : 'wrong');
@@ -752,7 +755,7 @@ function checkAnswer(answer) {
   });
 
   updateGameUI();
-  
+
   setTimeout(() => {
     if (State.game.levelProgress >= State.game.maxPerLevel) {
       showLevelSummary();
@@ -793,7 +796,7 @@ function updateGameUI() {
   document.getElementById('game-score-val').textContent = State.game.score;
   const acc = State.game.total > 0 ? Math.round((State.game.score / (State.game.total * 10)) * 100) : 0;
   document.getElementById('game-acc-val').textContent = `${acc}%`;
-  
+
   const levelEl = document.querySelector('.game-level');
   if (levelEl) levelEl.textContent = `LEVEL ${State.game.level} • ${State.game.levelProgress}/${State.game.maxPerLevel}`;
 }
@@ -810,3 +813,62 @@ document.getElementById('game-reset-btn').addEventListener('click', () => {
 
 init();
 
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// ADMIN TAB LOGIC
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+function initAdmin() {
+  const loginSubmit = document.getElementById('admin-login-submit');
+  const passwordInput = document.getElementById('admin-password');
+  const addCaseForm = document.getElementById('admin-add-case-form');
+  const formSubmit = document.getElementById('admin-form-submit');
+  
+  if (!loginSubmit) return;
+
+  const ADMIN_PASSWORD = 'lexadmin2025';
+  let isAdminAuthenticated = false;
+
+  loginSubmit.addEventListener('click', () => {
+    if (passwordInput.value === ADMIN_PASSWORD) {
+      isAdminAuthenticated = true;
+      document.getElementById('admin-login-container').style.display = 'none';
+      document.getElementById('admin-form-container').style.display = 'block';
+      showToast('Admin access granted.');
+      passwordInput.value = '';
+    } else {
+      showToast('Incorrect password.');
+    }
+  });
+
+  formSubmit.addEventListener('click', () => {
+    const title = document.getElementById('admin-case-title').value.trim();
+    const court = document.getElementById('admin-case-court').value;
+    const content = document.getElementById('admin-case-content').value.trim();
+    
+    if (!title || !content) {
+      showToast('Title and content are required.');
+      return;
+    }
+    
+    const newCase = {
+      id: 'MANUAL_' + Date.now(),
+      title: title,
+      court: court,
+      path: 'manual-entry',
+      fullText: content,
+      date: null,
+      tags: [],
+    };
+    
+    State.cases.unshift(newCase);
+    renderLibrary();
+    populateNoteCaseSelect();
+    showToast('Success: Custom case added.');
+    
+    document.getElementById('admin-case-title').value = '';
+    document.getElementById('admin-case-content').value = '';
+    navigateTo('library');
+  });
+}
+
+initAdmin();

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
@@ -13,9 +14,12 @@
   <link rel="apple-touch-icon" href="icons/icon-192.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,700;1,400&display=swap" rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,700;1,400&display=swap"
+    rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
 </head>
+
 <body>
 
   <!-- ===== HEADER ===== -->
@@ -42,7 +46,8 @@
         <p class="hero-sub">Keyword-search across all SU Court judgments.</p>
         <div class="search-box">
           <span class="search-icon">🔍</span>
-          <input type="text" id="search-input" class="search-input" placeholder="Search by keyword, party, or legal issue…" autocomplete="off" />
+          <input type="text" id="search-input" class="search-input"
+            placeholder="Search by keyword, party, or legal issue…" autocomplete="off" />
           <button class="clear-btn" id="clear-search" aria-label="Clear search">✕</button>
         </div>
         <div class="quick-filters">
@@ -50,6 +55,7 @@
           <div class="filter-chips">
             <button class="chip active" data-filter="all">All</button>
             <button class="chip" data-filter="SU Court">SU Court</button>
+            <button class="chip" data-filter="LSS Court">LSS Court</button>
           </div>
         </div>
       </div>
@@ -92,6 +98,7 @@
       <div class="library-filters">
         <button class="chip active" data-lib-filter="all">All Cases</button>
         <button class="chip" data-lib-filter="SU Court">SU Court</button>
+        <button class="chip" data-lib-filter="LSS Court">LSS Court</button>
       </div>
       <div class="case-list" id="library-list">
         <div class="empty-state" id="library-empty">
@@ -113,7 +120,8 @@
       <div class="totd-card" id="totd-card">
         <div class="totd-label">TERM OF THE DAY</div>
         <div class="totd-term" id="totd-term">Amicus Curiae</div>
-        <div class="totd-def" id="totd-def">An impartial adviser, often voluntary, to a court of law in a particular case.</div>
+        <div class="totd-def" id="totd-def">An impartial adviser, often voluntary, to a court of law in a particular
+          case.</div>
         <button class="totd-explore" id="totd-explore">Explore full entry →</button>
       </div>
 
@@ -173,7 +181,7 @@
             <span class="game-level">LEVEL 1</span>
             <span class="game-score">Score: <strong id="game-score-val">0</strong></span>
           </div>
-          
+
           <div class="game-question-box">
             <div class="game-label">LATIN PHRASE</div>
             <div class="game-latin-text" id="game-latin-text">...</div>
@@ -193,6 +201,44 @@
             <span>Accuracy: <strong id="game-acc-val">0%</strong></span>
           </div>
         </div>
+      </div>
+    </section>
+
+    <!-- ADMIN SCREEN -->
+    <section class="screen" id="screen-admin">
+      <div class="screen-header">
+        <h2 class="screen-title">Admin Dashboard</h2>
+        <p class="screen-sub">Add custom judgments manually</p>
+      </div>
+
+      <div id="admin-login-container" class="admin-login-box">
+        <div class="empty-icon">🔐</div>
+        <h3>Admin Access Required</h3>
+        <p style="margin-bottom: 20px;">Please enter the password to access the admin area.</p>
+        <div class="form-group">
+          <input type="password" id="admin-password" class="form-input" placeholder="Password" />
+        </div>
+        <button id="admin-login-submit" class="btn-primary" style="width: 100%;">Unlock</button>
+      </div>
+
+      <div id="admin-form-container" class="admin-form-box" style="display: none;">
+        <div class="form-group">
+          <label class="form-label" for="admin-case-title">Case Title (Parties)</label>
+          <input type="text" id="admin-case-title" class="form-input" placeholder="e.g. John Doe v Jane Doe" />
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="admin-case-court">Court</label>
+          <select id="admin-case-court" class="form-input">
+            <option value="SU Court">SU Court</option>
+            <option value="LSS Court">LSS Court</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="admin-case-content">Judgment Content</label>
+          <textarea id="admin-case-content" class="form-input form-textarea form-textarea-lg" style="height: 250px;"
+            placeholder="Paste the judgment contents here..."></textarea>
+        </div>
+        <button id="admin-form-submit" class="btn-primary" style="width: 100%;">Save to App Database</button>
       </div>
     </section>
 
@@ -219,6 +265,10 @@
     <button class="nav-item" data-screen="games" id="nav-games">
       <span class="nav-icon">🎮</span>
       <span class="nav-label">Quiz</span>
+    </button>
+    <button class="nav-item" data-screen="admin" id="nav-admin">
+      <span class="nav-icon">🔐</span>
+      <span class="nav-label">Admin</span>
     </button>
   </nav>
 
@@ -263,7 +313,8 @@
         </div>
         <div class="form-group">
           <label class="form-label" for="note-content">Notes</label>
-          <textarea id="note-content" class="form-input form-textarea form-textarea-lg" placeholder="Type your notes here…"></textarea>
+          <textarea id="note-content" class="form-input form-textarea form-textarea-lg"
+            placeholder="Type your notes here…"></textarea>
         </div>
       </div>
       <div class="modal-footer">
@@ -274,7 +325,8 @@
   </div>
 
   <!-- Maxim / Dictionary Detail Modal -->
-  <div class="modal-overlay" id="modal-toolkit-detail" role="dialog" aria-modal="true" aria-labelledby="toolkit-detail-title">
+  <div class="modal-overlay" id="modal-toolkit-detail" role="dialog" aria-modal="true"
+    aria-labelledby="toolkit-detail-title">
     <div class="modal">
       <div class="modal-header">
         <h3 id="toolkit-detail-title">Detail</h3>
@@ -295,4 +347,5 @@
   <script src="data/cases.js"></script>
   <script src="app.js"></script>
 </body>
+
 </html>

@@ -1179,3 +1179,19 @@ select.form-input option { background: var(--clr-surface2); color: var(--clr-tex
     gap: 16px;
   }
 }
+
+/* ========================
+   ADMIN SCREEN FORMS
+   ======================== */
+.admin-login-box, .admin-form-box {
+  background: var(--clr-surface);
+  border: 1px solid var(--clr-border);
+  border-radius: 12px;
+  padding: 24px;
+  margin: 16px;
+  text-align: center;
+}
+
+.admin-form-box {
+  text-align: left;
+}
