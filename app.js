@@ -815,22 +815,38 @@ init();
 
 
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// ADMIN TAB LOGIC
+// ADMIN TAB LOGIC (Syncs to GitHub via Vercel Serverless Function)
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 function initAdmin() {
   const loginSubmit = document.getElementById('admin-login-submit');
   const passwordInput = document.getElementById('admin-password');
-  const addCaseForm = document.getElementById('admin-add-case-form');
   const formSubmit = document.getElementById('admin-form-submit');
+  const fileInput = document.getElementById('admin-case-file');
   
   if (!loginSubmit) return;
 
   const ADMIN_PASSWORD = 'lexadmin2025';
-  let isAdminAuthenticated = false;
+  let adminPassword = ''; // store for API calls
 
+  // ── File upload: auto-fill textarea when .txt is selected ──
+  if (fileInput) {
+    fileInput.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        document.getElementById('admin-case-content').value = ev.target.result;
+        showToast('File loaded into content field.');
+      };
+      reader.onerror = () => showToast('Failed to read file.');
+      reader.readAsText(file);
+    });
+  }
+
+  // ── Login ──
   loginSubmit.addEventListener('click', () => {
     if (passwordInput.value === ADMIN_PASSWORD) {
-      isAdminAuthenticated = true;
+      adminPassword = passwordInput.value;
       document.getElementById('admin-login-container').style.display = 'none';
       document.getElementById('admin-form-container').style.display = 'block';
       showToast('Admin access granted.');
@@ -840,7 +856,26 @@ function initAdmin() {
     }
   });
 
-  formSubmit.addEventListener('click', () => {
+  // ── Helper: show/hide loading state ──
+  function setLoading(isLoading) {
+    const submitText = document.getElementById('admin-submit-text');
+    const spinner = document.getElementById('admin-submit-spinner');
+    formSubmit.disabled = isLoading;
+    submitText.textContent = isLoading ? 'Publishing...' : 'Publish to All Users';
+    spinner.style.display = isLoading ? 'inline' : 'none';
+  }
+
+  function showStatus(message, isError) {
+    const statusEl = document.getElementById('admin-status-msg');
+    statusEl.textContent = message;
+    statusEl.style.display = 'block';
+    statusEl.style.background = isError ? '#fef2f2' : '#f0fdf4';
+    statusEl.style.color = isError ? '#b91c1c' : '#15803d';
+    statusEl.style.border = isError ? '1px solid #fecaca' : '1px solid #bbf7d0';
+  }
+
+  // ── Submit case to API ──
+  formSubmit.addEventListener('click', async () => {
     const title = document.getElementById('admin-case-title').value.trim();
     const court = document.getElementById('admin-case-court').value;
     const content = document.getElementById('admin-case-content').value.trim();
@@ -850,24 +885,56 @@ function initAdmin() {
       return;
     }
     
-    const newCase = {
-      id: 'MANUAL_' + Date.now(),
-      title: title,
-      court: court,
-      path: 'manual-entry',
-      fullText: content,
-      date: null,
-      tags: [],
-    };
-    
-    State.cases.unshift(newCase);
-    renderLibrary();
-    populateNoteCaseSelect();
-    showToast('Success: Custom case added.');
-    
-    document.getElementById('admin-case-title').value = '';
-    document.getElementById('admin-case-content').value = '';
-    navigateTo('library');
+    setLoading(true);
+    document.getElementById('admin-status-msg').style.display = 'none';
+
+    try {
+      const response = await fetch('/api/add-case', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          password: adminPassword || ADMIN_PASSWORD,
+          title: title,
+          court: court,
+          content: content,
+        }),
+      });
+
+      const result = await response.json();
+
+      if (response.ok && result.success) {
+        // Also add locally so admin sees it immediately
+        const newCase = {
+          id: result.case.id || 'MANUAL_' + Date.now(),
+          title: result.case.title || title,
+          court: result.case.court || court,
+          path: result.case.path || 'manual-entry',
+          fullText: content,
+          date: null,
+          tags: [],
+        };
+        State.cases.unshift(newCase);
+        renderLibrary();
+        populateNoteCaseSelect();
+        
+        showStatus(result.message || 'Judgment published successfully! All users will see it shortly.', false);
+        showToast('✅ Judgment published!');
+        
+        // Clear form
+        document.getElementById('admin-case-title').value = '';
+        document.getElementById('admin-case-content').value = '';
+        if (fileInput) fileInput.value = '';
+      } else {
+        showStatus(result.error || 'Failed to publish. Please try again.', true);
+        showToast('❌ ' + (result.error || 'Failed to publish.'));
+      }
+    } catch (err) {
+      console.error('Admin submit error:', err);
+      showStatus('Network error. Make sure you are online and try again.', true);
+      showToast('❌ Network error.');
+    } finally {
+      setLoading(false);
+    }
   });
 }
 
