@@ -102,23 +102,36 @@ module.exports = async function handler(req, res) {
     const courtType = court || 'SU Court';
     const filename = titleToFilename(cleanTitle) + '.txt';
 
-    // ── Step 1: Create the judgment .txt file in judgments/ ──
+    // ── Step 1: Check if the judgment .txt file already exists in judgments/ ──
     const judgmentPath = `judgments/${filename}`;
     const encodedContent = Buffer.from(cleanContent, 'utf-8').toString('base64');
+    
+    let existingJudgmentSha = null;
+    try {
+      const existingFile = await githubRequest('GET', `/repos/${REPO}/contents/${judgmentPath}?ref=main`);
+      if (existingFile && existingFile.sha) {
+        existingJudgmentSha = existingFile.sha;
+      }
+    } catch (e) {
+      // File does not exist yet (404), which is normal for new judgments
+    }
 
-    await githubRequest('PUT', `/repos/${REPO}/contents/${judgmentPath}`, {
-      message: `Add judgment: ${cleanTitle}`,
+    const judgmentPayload = {
+      message: `${existingJudgmentSha ? 'Update' : 'Add'} judgment: ${cleanTitle}`,
       content: encodedContent,
       branch: 'main',
-    });
+    };
+    if (existingJudgmentSha) {
+      judgmentPayload.sha = existingJudgmentSha;
+    }
+
+    await githubRequest('PUT', `/repos/${REPO}/contents/${judgmentPath}`, judgmentPayload);
 
     // ── Step 2: Read current data/cases.js ──
     const casesFile = await githubRequest('GET', `/repos/${REPO}/contents/data/cases.js?ref=main`);
     const currentCasesContent = Buffer.from(casesFile.content, 'base64').toString('utf-8');
 
-    // ── Step 3: Parse and append the new case ──
-    // The file looks like: const CASES = [ ... ];
-    // We need to add a new entry to the array
+    // ── Step 3: Parse and append / replace the case entry ──
     const newCaseEntry = {
       filename: filename,
       title: cleanTitle,
@@ -127,25 +140,44 @@ module.exports = async function handler(req, res) {
       rawText: cleanContent,
     };
 
-    // Find the position of the closing "];" and insert before it
     let updatedCases;
-    const closingIndex = currentCasesContent.lastIndexOf('];');
-    if (closingIndex !== -1) {
-      const before = currentCasesContent.substring(0, closingIndex).trimEnd();
-      // Add comma if there are existing entries
-      const needsComma = before.trimEnd().endsWith('}');
-      const entryJson = JSON.stringify(newCaseEntry, null, 2);
-      updatedCases = before + (needsComma ? ',\n  ' : '\n  ') + entryJson + '\n];\n';
-    } else {
-      // Fallback: rebuild entirely
-      updatedCases = `const CASES = [${JSON.stringify(newCaseEntry, null, 2)}];\n`;
+    try {
+      // Extract array JSON from `const CASES = [...];`
+      const jsonStart = currentCasesContent.indexOf('[');
+      const jsonEnd = currentCasesContent.lastIndexOf(']');
+      if (jsonStart !== -1 && jsonEnd !== -1) {
+        const jsonStr = currentCasesContent.substring(jsonStart, jsonEnd + 1);
+        const casesArray = JSON.parse(jsonStr);
+        
+        // Check if case with same filename already exists
+        const existingIdx = casesArray.findIndex(c => c.filename === filename);
+        if (existingIdx !== -1) {
+          casesArray[existingIdx] = newCaseEntry;
+        } else {
+          casesArray.unshift(newCaseEntry);
+        }
+        updatedCases = `const CASES = ${JSON.stringify(casesArray, null, 2)};\n`;
+      } else {
+        throw new Error('Could not parse CASES array bounds');
+      }
+    } catch (parseErr) {
+      // Fallback regex / substring insertion if full JSON parse fails
+      const closingIndex = currentCasesContent.lastIndexOf('];');
+      if (closingIndex !== -1) {
+        const before = currentCasesContent.substring(0, closingIndex).trimEnd();
+        const needsComma = before.trimEnd().endsWith('}');
+        const entryJson = JSON.stringify(newCaseEntry, null, 2);
+        updatedCases = before + (needsComma ? ',\n  ' : '\n  ') + entryJson + '\n];\n';
+      } else {
+        updatedCases = `const CASES = [${JSON.stringify(newCaseEntry, null, 2)}];\n`;
+      }
     }
 
     const encodedCases = Buffer.from(updatedCases, 'utf-8').toString('base64');
 
     // ── Step 4: Commit updated cases.js ──
     await githubRequest('PUT', `/repos/${REPO}/contents/data/cases.js`, {
-      message: `Update cases.js: add ${cleanTitle}`,
+      message: `Update cases.js: ${cleanTitle}`,
       content: encodedCases,
       sha: casesFile.sha, // required for updating existing files
       branch: 'main',
