@@ -900,15 +900,20 @@ function initAdmin() {
         }),
       });
 
-      const result = await response.json();
+      let result;
+      try {
+        result = await response.json();
+      } catch (parseErr) {
+        throw new Error(`Server returned status ${response.status} (${response.statusText || 'Non-JSON response'})`);
+      }
 
       if (response.ok && result.success) {
         // Also add locally so admin sees it immediately
         const newCase = {
-          id: result.case.id || 'MANUAL_' + Date.now(),
-          title: result.case.title || title,
-          court: result.case.court || court,
-          path: result.case.path || 'manual-entry',
+          id: result.case?.id || 'MANUAL_' + Date.now(),
+          title: result.case?.title || title,
+          court: result.case?.court || court,
+          path: result.case?.path || 'manual-entry',
           fullText: content,
           date: null,
           tags: [],
@@ -925,13 +930,14 @@ function initAdmin() {
         document.getElementById('admin-case-content').value = '';
         if (fileInput) fileInput.value = '';
       } else {
-        showStatus(result.error || 'Failed to publish. Please try again.', true);
-        showToast('❌ ' + (result.error || 'Failed to publish.'));
+        const errorMsg = result?.error || `Failed to publish (Status: ${response.status}).`;
+        showStatus(errorMsg, true);
+        showToast('❌ ' + errorMsg);
       }
     } catch (err) {
       console.error('Admin submit error:', err);
-      showStatus('Network error. Make sure you are online and try again.', true);
-      showToast('❌ Network error.');
+      showStatus(err.message || 'Network error. Make sure you are online and try again.', true);
+      showToast('❌ ' + (err.message || 'Network error.'));
     } finally {
       setLoading(false);
     }
