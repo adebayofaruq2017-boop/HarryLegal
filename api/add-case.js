@@ -122,6 +122,7 @@ module.exports = async function handler(req, res) {
     const newCaseEntry = {
       filename: filename,
       title: cleanTitle,
+      court: courtType,
       path: judgmentPath,
       rawText: cleanContent,
     };

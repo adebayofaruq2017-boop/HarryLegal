@@ -5,6 +5,7 @@
     { "src": "**/*", "use": "@vercel/static" }
   ],
   "routes": [
+    { "src": "/api/add-case", "dest": "/api/add-case.js" },
     { "src": "/api/(.*)", "dest": "/api/$1" },
     { "handle": "filesystem" }
   ]

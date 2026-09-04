@@ -102,11 +102,16 @@ async function loadAndIndexCases() {
 
   for (const c of CASES) {
     const text = await extractFileText(c);
-    // Try to guess court from filename or content
-    let court = 'SU Court';
-    if (c.filename.toUpperCase().includes('LSS') ||
-      (text && (text.includes('Law Students Society Court') || text.includes('LSSJ/') || text.includes('LSS Court')))) {
-      court = 'LSS Court';
+    // Try to guess court from data, filename or content
+    let court = c.court || 'SU Court';
+    if (!c.court) {
+      if (c.filename.toUpperCase().includes('LSS') ||
+        (text && (text.includes('Law Students Society Court') || text.includes('LSSJ/') || text.includes('LSS Court')))) {
+        court = 'LSS Court';
+      } else if (c.filename.toUpperCase().includes('CONVENTIONAL') ||
+        (text && (text.includes('Supreme Court') || text.includes('Court of Appeal') || text.includes('High Court') || text.includes('NWLR') || text.includes('Conventional Court')))) {
+        court = 'Conventional Court';
+      }
     }
 
     loadedCases.push({
@@ -211,7 +216,7 @@ document.querySelectorAll('[data-close]').forEach(btn => {
 // CASE CARD HTML
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 function buildCaseCard(c, query = '') {
-  const badgeClass = c.court === 'SU Court' ? 'badge-su' : (c.court === 'LSS Court' ? 'badge-lss' : '');
+  const badgeClass = c.court === 'SU Court' ? 'badge-su' : (c.court === 'LSS Court' ? 'badge-lss' : (c.court === 'Conventional Court' ? 'badge-conventional' : ''));
 
   const titleHl = query ? highlightText(c.title, query) : escapeHtml(c.title);
 
@@ -365,7 +370,7 @@ function viewCase(id, queryHit = '') {
   const c = State.cases.find(x => x.id === id);
   if (!c) return;
 
-  const badgeClass = c.court === 'SU Court' ? 'badge-su' : (c.court === 'LSS Court' ? 'badge-lss' : '');
+  const badgeClass = c.court === 'SU Court' ? 'badge-su' : (c.court === 'LSS Court' ? 'badge-lss' : (c.court === 'Conventional Court' ? 'badge-conventional' : ''));
 
   document.getElementById('case-modal-title').textContent = c.court;
   document.getElementById('case-detail-body').innerHTML = `
@@ -889,7 +894,7 @@ function initAdmin() {
     document.getElementById('admin-status-msg').style.display = 'none';
 
     try {
-      const response = await fetch('/api/add-case', {
+      const response = await fetch('/api/add-case.js', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

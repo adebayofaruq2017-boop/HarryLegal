@@ -41,221 +41,248 @@
 
     <!-- SEARCH SCREEN -->
     <section class="screen active" id="screen-search">
-      <div class="search-hero">
-        <h1 class="hero-title">Search the Archive.</h1>
-        <p class="hero-sub">Keyword-search across all campus court judgments.</p>
-        <div class="search-box">
-          <span class="search-icon">🔍</span>
-          <input type="text" id="search-input" class="search-input"
-            placeholder="Search by keyword, party, or legal issue…" autocomplete="off" />
-          <button class="clear-btn" id="clear-search" aria-label="Clear search">✕</button>
+      <div class="screen-content">
+        <div class="search-hero">
+          <h1 class="hero-title">Search the Archive.</h1>
+          <p class="hero-sub">Keyword-search across campus and conventional court judgments.</p>
+          <div class="search-box">
+            <span class="search-icon">🔍</span>
+            <input type="text" id="search-input" class="search-input"
+              placeholder="Search by keyword, party, or legal issue…" autocomplete="off" />
+            <button class="clear-btn" id="clear-search" aria-label="Clear search">✕</button>
+          </div>
+          <div class="quick-filters">
+            <span class="filter-label">QUICK FILTERS</span>
+            <div class="filter-chips">
+              <button class="chip active" data-filter="all">All</button>
+              <button class="chip" data-filter="SU Court">SU Court</button>
+              <button class="chip" data-filter="LSS Court">LSS Court</button>
+              <button class="chip" data-filter="Conventional Court">Conventional Court</button>
+            </div>
+          </div>
         </div>
-        <div class="quick-filters">
-          <span class="filter-label">QUICK FILTERS</span>
-          <div class="filter-chips">
-            <button class="chip active" data-filter="all">All</button>
-            <button class="chip" data-filter="SU Court">SU Court</button>
-            <button class="chip" data-filter="LSS Court">LSS Court</button>
+
+        <!-- Search Results -->
+        <div class="results-container" id="search-results" style="display:none;">
+          <div class="results-header">
+            <span id="results-count">0 results</span>
+            <span id="results-query"></span>
+          </div>
+          <div class="results-list" id="results-list"></div>
+        </div>
+
+        <!-- Empty State -->
+        <div class="feature-cards" id="feature-cards">
+          <div class="feature-card">
+            <div class="feature-icon">📜</div>
+            <h3>Case Archive</h3>
+            <p>Access all uploaded SU, LSS &amp; Conventional Court judgments.</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">⚡</div>
+            <h3>Keyword Discovery</h3>
+            <p>Search by fact, party name, legal principle, or any keyword found in the judgment.</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">📖</div>
+            <h3>Legal Toolkit</h3>
+            <p>100 legal maxims and a full A–Z law dictionary — always at your fingertips.</p>
           </div>
         </div>
       </div>
-
-      <!-- Search Results -->
-      <div class="results-container" id="search-results" style="display:none;">
-        <div class="results-header">
-          <span id="results-count">0 results</span>
-          <span id="results-query"></span>
-        </div>
-        <div class="results-list" id="results-list"></div>
-      </div>
-
-      <!-- Empty State -->
-      <div class="feature-cards" id="feature-cards">
-        <div class="feature-card">
-          <div class="feature-icon">📜</div>
-          <h3>Case Archive</h3>
-          <p>Access all uploaded SU & LSS Court judgments from your institution.</p>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon">⚡</div>
-          <h3>Keyword Discovery</h3>
-          <p>Search by fact, party name, legal principle, or any keyword found in the judgment.</p>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon">📖</div>
-          <h3>Legal Toolkit</h3>
-          <p>100 legal maxims and a full A–Z law dictionary — always at your fingertips.</p>
-        </div>
-      </div>
+      <footer class="app-footer">
+        <p>&copy; 2026 Adebayo Faruq Adebayo SAU, AICMC. All rights reserved.</p>
+      </footer>
     </section>
 
     <!-- LIBRARY SCREEN -->
     <section class="screen" id="screen-library">
-      <div class="screen-header">
-        <h2 class="screen-title">Case Library</h2>
-        <p class="screen-sub">All uploaded judgments</p>
-      </div>
-      <div class="library-filters">
-        <button class="chip active" data-lib-filter="all">All Cases</button>
-        <button class="chip" data-lib-filter="SU Court">SU Court</button>
-        <button class="chip" data-lib-filter="LSS Court">LSS Court</button>
-      </div>
-      <div class="case-list" id="library-list">
-        <div class="empty-state" id="library-empty">
-          <div class="empty-icon">📂</div>
-          <p>No cases uploaded yet.</p>
-          <p class="empty-sub">Tap the <strong>+</strong> button to import a judgment PDF.</p>
+      <div class="screen-content">
+        <div class="screen-header">
+          <h2 class="screen-title">Case Library</h2>
+          <p class="screen-sub">All uploaded judgments</p>
+        </div>
+        <div class="library-filters">
+          <button class="chip active" data-lib-filter="all">All Cases</button>
+          <button class="chip" data-lib-filter="SU Court">SU Court</button>
+          <button class="chip" data-lib-filter="LSS Court">LSS Court</button>
+          <button class="chip" data-lib-filter="Conventional Court">Conventional Court</button>
+        </div>
+        <div class="case-list" id="library-list">
+          <div class="empty-state" id="library-empty">
+            <div class="empty-icon">📂</div>
+            <p>No cases uploaded yet.</p>
+            <p class="empty-sub">Tap the <strong>+</strong> button to import a judgment PDF.</p>
+          </div>
         </div>
       </div>
+      <footer class="app-footer">
+        <p>&copy; 2026 Adebayo Faruq Adebayo SAU, AICMC. All rights reserved.</p>
+      </footer>
     </section>
 
     <!-- TOOLKIT SCREEN -->
     <section class="screen" id="screen-toolkit">
-      <div class="screen-header">
-        <h2 class="screen-title">Legal Toolkit</h2>
-        <p class="screen-sub">A curated repository of legal principles and terminology.</p>
-      </div>
+      <div class="screen-content">
+        <div class="screen-header">
+          <h2 class="screen-title">Legal Toolkit</h2>
+          <p class="screen-sub">A curated repository of legal principles and terminology.</p>
+        </div>
 
-      <!-- Term of the Day -->
-      <div class="totd-card" id="totd-card">
-        <div class="totd-label">TERM OF THE DAY</div>
-        <div class="totd-term" id="totd-term">Amicus Curiae</div>
-        <div class="totd-def" id="totd-def">An impartial adviser, often voluntary, to a court of law in a particular
-          case.</div>
-        <button class="totd-explore" id="totd-explore">Explore full entry →</button>
-      </div>
+        <!-- Term of the Day -->
+        <div class="totd-card" id="totd-card">
+          <div class="totd-label">TERM OF THE DAY</div>
+          <div class="totd-term" id="totd-term">Amicus Curiae</div>
+          <div class="totd-def" id="totd-def">An impartial adviser, often voluntary, to a court of law in a particular
+            case.</div>
+          <button class="totd-explore" id="totd-explore">Explore full entry →</button>
+        </div>
 
-      <!-- Toolkit Tabs -->
-      <div class="toolkit-tabs">
-        <button class="tk-tab active" data-tk="maxims" id="tab-maxims">⚖ Legal Maxims</button>
-        <button class="tk-tab" data-tk="dictionary" id="tab-dictionary">📖 A–Z Dictionary</button>
-      </div>
+        <!-- Toolkit Tabs -->
+        <div class="toolkit-tabs">
+          <button class="tk-tab active" data-tk="maxims" id="tab-maxims">⚖ Legal Maxims</button>
+          <button class="tk-tab" data-tk="dictionary" id="tab-dictionary">📖 A–Z Dictionary</button>
+        </div>
 
-      <!-- Toolkit Search -->
-      <div class="toolkit-search-wrap">
-        <span class="search-icon">🔍</span>
-        <input type="text" id="toolkit-search" class="search-input" placeholder="Search maxims or legal terms…" />
-      </div>
+        <!-- Toolkit Search -->
+        <div class="toolkit-search-wrap">
+          <span class="search-icon">🔍</span>
+          <input type="text" id="toolkit-search" class="search-input" placeholder="Search maxims or legal terms…" />
+        </div>
 
-      <!-- Maxims Panel -->
-      <div class="toolkit-panel active" id="panel-maxims">
-        <div class="maxims-list" id="maxims-list"></div>
-      </div>
+        <!-- Maxims Panel -->
+        <div class="toolkit-panel active" id="panel-maxims">
+          <div class="maxims-list" id="maxims-list"></div>
+        </div>
 
-      <!-- Dictionary Panel -->
-      <div class="toolkit-panel" id="panel-dictionary">
-        <div class="az-nav" id="az-nav"></div>
-        <div class="dict-list" id="dict-list"></div>
+        <!-- Dictionary Panel -->
+        <div class="toolkit-panel" id="panel-dictionary">
+          <div class="az-nav" id="az-nav"></div>
+          <div class="dict-list" id="dict-list"></div>
+        </div>
       </div>
+      <footer class="app-footer">
+        <p>&copy; 2026 Adebayo Faruq Adebayo SAU, AICMC. All rights reserved.</p>
+      </footer>
     </section>
 
     <!-- NOTES SCREEN -->
     <section class="screen" id="screen-notes">
-      <div class="screen-header-row">
-        <div>
-          <h2 class="screen-title">Case Notes</h2>
-          <p class="screen-sub">Your private notes &amp; hearing dates</p>
+      <div class="screen-content">
+        <div class="screen-header-row">
+          <div>
+            <h2 class="screen-title">Case Notes</h2>
+            <p class="screen-sub">Your private notes &amp; hearing dates</p>
+          </div>
+          <button class="btn-primary-sm" id="new-note-btn">+ New Note</button>
         </div>
-        <button class="btn-primary-sm" id="new-note-btn">+ New Note</button>
-      </div>
 
-      <div class="notes-list" id="notes-list">
-        <div class="empty-state" id="notes-empty">
-          <div class="empty-icon">🗒️</div>
-          <p>No notes yet.</p>
-          <p class="empty-sub">Tap <strong>+ New Note</strong> to start.</p>
+        <div class="notes-list" id="notes-list">
+          <div class="empty-state" id="notes-empty">
+            <div class="empty-icon">🗒️</div>
+            <p>No notes yet.</p>
+            <p class="empty-sub">Tap <strong>+ New Note</strong> to start.</p>
+          </div>
         </div>
       </div>
+      <footer class="app-footer">
+        <p>&copy; 2026 Adebayo Faruq Adebayo SAU, AICMC. All rights reserved.</p>
+      </footer>
     </section>
 
     <!-- GAMES SCREEN -->
     <section class="screen" id="screen-games">
-      <div class="screen-header">
-        <h2 class="screen-title">Maxim Master</h2>
-        <p class="screen-sub">Test your knowledge of legal maxims & terms.</p>
-      </div>
-
-      <div class="game-quiz-container" id="game-area">
-        <div class="game-card" id="game-card">
-          <div class="game-meta">
-            <span class="game-level">LEVEL 1</span>
-            <span class="game-score">Score: <strong id="game-score-val">0</strong></span>
-          </div>
-
-          <div class="game-question-box">
-            <div class="game-label">LATIN PHRASE</div>
-            <div class="game-latin-text" id="game-latin-text">...</div>
-            <p class="game-instruction">Choose the correct English meaning:</p>
-          </div>
-
-          <div class="game-options" id="game-options">
-            <!-- Dynamically populated buttons -->
-          </div>
-
-          <div class="game-feedback-pill" id="game-feedback"></div>
+      <div class="screen-content">
+        <div class="screen-header">
+          <h2 class="screen-title">Maxim Master</h2>
+          <p class="screen-sub">Test your knowledge of legal maxims & terms.</p>
         </div>
 
-        <div class="game-actions">
-          <button class="btn-outline" id="game-reset-btn">Reset Progress</button>
-          <div class="game-stats-row">
-            <span>Accuracy: <strong id="game-acc-val">0%</strong></span>
+        <div class="game-quiz-container" id="game-area">
+          <div class="game-card" id="game-card">
+            <div class="game-meta">
+              <span class="game-level">LEVEL 1</span>
+              <span class="game-score">Score: <strong id="game-score-val">0</strong></span>
+            </div>
+
+            <div class="game-question-box">
+              <div class="game-label">LATIN PHRASE</div>
+              <div class="game-latin-text" id="game-latin-text">...</div>
+              <p class="game-instruction">Choose the correct English meaning:</p>
+            </div>
+
+            <div class="game-options" id="game-options">
+              <!-- Dynamically populated buttons -->
+            </div>
+
+            <div class="game-feedback-pill" id="game-feedback"></div>
+          </div>
+
+          <div class="game-actions">
+            <button class="btn-outline" id="game-reset-btn">Reset Progress</button>
+            <div class="game-stats-row">
+              <span>Accuracy: <strong id="game-acc-val">0%</strong></span>
+            </div>
           </div>
         </div>
       </div>
+      <footer class="app-footer">
+        <p>&copy; 2026 Adebayo Faruq Adebayo SAU, AICMC. All rights reserved.</p>
+      </footer>
     </section>
 
     <!-- ADMIN SCREEN -->
     <section class="screen" id="screen-admin">
-      <div class="screen-header">
-        <h2 class="screen-title">Admin Dashboard</h2>
-        <p class="screen-sub">Add custom judgments manually</p>
-      </div>
+      <div class="screen-content">
+        <div class="screen-header">
+          <h2 class="screen-title">Admin Dashboard</h2>
+          <p class="screen-sub">Add custom judgments manually</p>
+        </div>
 
-      <div id="admin-login-container" class="admin-login-box">
-        <div class="empty-icon">🔐</div>
-        <h3>Admin Access Required</h3>
-        <p style="margin-bottom: 20px;">Please enter the password to access the admin area.</p>
-        <div class="form-group">
-          <input type="password" id="admin-password" class="form-input" placeholder="Password" />
+        <div id="admin-login-container" class="admin-login-box">
+          <div class="empty-icon">🔐</div>
+          <h3>Admin Access Required</h3>
+          <p style="margin-bottom: 20px;">Please enter the password to access the admin area.</p>
+          <div class="form-group">
+            <input type="password" id="admin-password" class="form-input" placeholder="Password" />
+          </div>
+          <button id="admin-login-submit" class="btn-primary" style="width: 100%;">Unlock</button>
         </div>
-        <button id="admin-login-submit" class="btn-primary" style="width: 100%;">Unlock</button>
-      </div>
 
-      <div id="admin-form-container" class="admin-form-box" style="display: none;">
-        <div class="form-group">
-          <label class="form-label" for="admin-case-title">Case Title (Parties)</label>
-          <input type="text" id="admin-case-title" class="form-input" placeholder="e.g. John Doe v Jane Doe" />
+        <div id="admin-form-container" class="admin-form-box" style="display: none;">
+          <div class="form-group">
+            <label class="form-label" for="admin-case-title">Case Title (Parties)</label>
+            <input type="text" id="admin-case-title" class="form-input" placeholder="e.g. John Doe v Jane Doe" />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="admin-case-court">Court</label>
+            <select id="admin-case-court" class="form-input">
+              <option value="SU Court">SU Court</option>
+              <option value="LSS Court">LSS Court</option>
+              <option value="Conventional Court">Conventional Court</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="admin-case-file">Upload Judgment File (.txt) — optional</label>
+            <input type="file" id="admin-case-file" class="form-input" accept=".txt" style="padding: 10px;" />
+            <p style="font-size: 11px; color: #94a3b8; margin-top: 4px;">Upload a .txt file or paste content below</p>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="admin-case-content">Judgment Content</label>
+            <textarea id="admin-case-content" class="form-input form-textarea form-textarea-lg" style="height: 250px;"
+              placeholder="Paste the judgment contents here..."></textarea>
+          </div>
+          <button id="admin-form-submit" class="btn-primary" style="width: 100%; position: relative;">
+            <span id="admin-submit-text">Publish to All Users</span>
+            <span id="admin-submit-spinner" style="display: none; margin-left: 8px;">⏳</span>
+          </button>
+          <div id="admin-status-msg" style="margin-top: 12px; padding: 10px; border-radius: 8px; font-size: 13px; display: none;"></div>
         </div>
-        <div class="form-group">
-          <label class="form-label" for="admin-case-court">Court</label>
-          <select id="admin-case-court" class="form-input">
-            <option value="SU Court">SU Court</option>
-            <option value="LSS Court">LSS Court</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label class="form-label" for="admin-case-file">Upload Judgment File (.txt) — optional</label>
-          <input type="file" id="admin-case-file" class="form-input" accept=".txt" style="padding: 10px;" />
-          <p style="font-size: 11px; color: #94a3b8; margin-top: 4px;">Upload a .txt file or paste content below</p>
-        </div>
-        <div class="form-group">
-          <label class="form-label" for="admin-case-content">Judgment Content</label>
-          <textarea id="admin-case-content" class="form-input form-textarea form-textarea-lg" style="height: 250px;"
-            placeholder="Paste the judgment contents here..."></textarea>
-        </div>
-        <button id="admin-form-submit" class="btn-primary" style="width: 100%; position: relative;">
-          <span id="admin-submit-text">Publish to All Users</span>
-          <span id="admin-submit-spinner" style="display: none; margin-left: 8px;">⏳</span>
-        </button>
-        <div id="admin-status-msg" style="margin-top: 12px; padding: 10px; border-radius: 8px; font-size: 13px; display: none;"></div>
       </div>
+      <footer class="app-footer">
+        <p>&copy; 2026 Adebayo Faruq Adebayo SAU, AICMC. All rights reserved.</p>
+      </footer>
     </section>
-
-    <!-- ===== FOOTER ===== -->
-    <footer
-      style="text-align: center; padding: 24px 16px 80px 16px; font-size: 12px; color: #64748b; border-top: 1px solid #e2e8f0; margin-top: 40px;">
-      <p>&copy; 2026 Adebayo Faruq Adebayo SAU, AICMC. All rights reserved.</p>
-    </footer>
 
   </main>
 

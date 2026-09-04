@@ -11,9 +11,17 @@ Dir.glob("judgments/*").each do |file|
   filename = File.basename(file)
   title = filename.sub(/\.(pdf|txt)$/i, '').gsub(/[-_]/, ' ')
   
+  court = "SU Court"
+  if filename.upcase.include?("LSS")
+    court = "LSS Court"
+  elsif filename.upcase.include?("CONVENTIONAL")
+    court = "Conventional Court"
+  end
+
   case_data = {
     "filename" => filename,
     "title" => title,
+    "court" => court,
     "path" => file
   }
   
