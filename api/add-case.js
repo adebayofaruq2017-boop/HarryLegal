@@ -13,16 +13,22 @@ const https = require('https');
  */
 function githubRequest(method, path, body) {
   return new Promise((resolve, reject) => {
+    const payload = body ? JSON.stringify(body) : null;
+    const headers = {
+      'Authorization': `token ${process.env.GITHUB_TOKEN}`,
+      'Accept': 'application/vnd.github.v3+json',
+      'Content-Type': 'application/json',
+      'User-Agent': 'LexCampus-Admin',
+    };
+    if (payload) {
+      headers['Content-Length'] = Buffer.byteLength(payload);
+    }
+
     const options = {
       hostname: 'api.github.com',
       path: path,
       method: method,
-      headers: {
-        'Authorization': `token ${process.env.GITHUB_TOKEN}`,
-        'Accept': 'application/vnd.github.v3+json',
-        'Content-Type': 'application/json',
-        'User-Agent': 'LexCampus-Admin',
-      },
+      headers: headers,
     };
 
     const req = https.request(options, (res) => {
@@ -30,7 +36,7 @@ function githubRequest(method, path, body) {
       res.on('data', (chunk) => (data += chunk));
       res.on('end', () => {
         try {
-          const parsed = JSON.parse(data);
+          const parsed = data ? JSON.parse(data) : {};
           if (res.statusCode >= 200 && res.statusCode < 300) {
             resolve(parsed);
           } else {
@@ -43,7 +49,7 @@ function githubRequest(method, path, body) {
     });
 
     req.on('error', reject);
-    if (body) req.write(JSON.stringify(body));
+    if (payload) req.write(payload);
     req.end();
   });
 }
