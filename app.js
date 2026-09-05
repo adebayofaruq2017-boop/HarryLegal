@@ -102,15 +102,17 @@ async function loadAndIndexCases() {
 
   for (const c of CASES) {
     const text = await extractFileText(c);
-    // Try to guess court from data, filename or content
-    let court = c.court || 'SU Court';
-    if (!c.court) {
-      if (c.filename.toUpperCase().includes('LSS') ||
-        (text && (text.includes('Law Students Society Court') || text.includes('LSSJ/') || text.includes('LSS Court')))) {
+    // Respect explicitly set court (e.g. from Admin upload), otherwise categorize campus courts
+    let court = c.court;
+    if (!court) {
+      const fn = (c.filename || '').toUpperCase();
+      if (fn.includes('LSS') || (text && (text.includes('Law Students Society Court') || text.includes('LSSJ/') || text.includes('LSS Court')))) {
         court = 'LSS Court';
-      } else if (c.filename.toUpperCase().includes('CONVENTIONAL') ||
-        (text && (text.includes('Supreme Court') || text.includes('Court of Appeal') || text.includes('High Court') || text.includes('NWLR') || text.includes('Conventional Court')))) {
+      } else if (fn.includes('CONVENTIONAL')) {
         court = 'Conventional Court';
+      } else {
+        // All default campus cases belong to SU Court
+        court = 'SU Court';
       }
     }
 
