@@ -17,7 +17,7 @@
   <link
     href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,700;1,400&display=swap"
     rel="stylesheet" />
-  <link rel="stylesheet" href="style.css?v=5" />
+  <link rel="stylesheet" href="style.css?v=6" />
 </head>
 
 <body>
@@ -277,6 +277,25 @@
             <span id="admin-submit-spinner" style="display: none; margin-left: 8px;">⏳</span>
           </button>
           <div id="admin-status-msg" style="margin-top: 12px; padding: 10px; border-radius: 8px; font-size: 13px; display: none;"></div>
+
+          <!-- Manage / Delete Judgments Section -->
+          <div class="admin-manage-section" style="margin-top: 36px; padding-top: 24px; border-top: 1px solid var(--clr-border);">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+              <div>
+                <h3 style="font-size: 15px; font-weight: 700; color: var(--clr-text-h);">Manage Published Judgments</h3>
+                <p style="font-size: 12px; color: var(--clr-text-muted);">Delete any judgments added with errors</p>
+              </div>
+              <span id="admin-cases-count" style="font-size: 11px; background: var(--clr-surface2); padding: 3px 10px; border-radius: 99px; font-weight: 600; color: var(--clr-text);">0 judgments</span>
+            </div>
+
+            <div style="margin-bottom: 14px;">
+              <input type="text" id="admin-manage-search" class="form-input" placeholder="Search judgments to delete..." style="padding: 10px 14px; font-size: 13px; width: 100%; border-radius: 8px;" />
+            </div>
+
+            <div id="admin-cases-list" style="display: flex; flex-direction: column; gap: 8px; max-height: 400px; overflow-y: auto; padding-right: 2px;">
+              <!-- dynamically populated -->
+            </div>
+          </div>
         </div>
       </div>
       <footer class="app-footer">
@@ -384,8 +403,8 @@
   <script>pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';</script>
   <script src="data/maxims.js"></script>
   <script src="data/dictionary.js"></script>
-  <script src="data/cases.js?v=5"></script>
-  <script src="app.js?v=5"></script>
+  <script src="data/cases.js?v=6"></script>
+  <script src="app.js?v=6"></script>
 
 </body>
 

@@ -859,10 +859,112 @@ function initAdmin() {
       if (formBox) formBox.style.display = 'block';
       showToast('Admin access granted.');
       passwordInput.value = '';
+      renderAdminCaseList();
     } else {
       showToast('Incorrect password.');
     }
   });
+
+  // ── Render list of judgments for admin management ──
+  function renderAdminCaseList(query = '') {
+    const listEl = document.getElementById('admin-cases-list');
+    const countEl = document.getElementById('admin-cases-count');
+    if (!listEl) return;
+
+    const lq = (query || '').toLowerCase().trim();
+    const cases = State.cases.filter(c => {
+      if (!lq) return true;
+      return (c.title && c.title.toLowerCase().includes(lq)) ||
+             (c.court && c.court.toLowerCase().includes(lq)) ||
+             (c.id && c.id.toLowerCase().includes(lq));
+    });
+
+    if (countEl) {
+      countEl.textContent = `${State.cases.length} judgment${State.cases.length !== 1 ? 's' : ''}`;
+    }
+
+    if (cases.length === 0) {
+      listEl.innerHTML = `
+        <div style="text-align: center; padding: 20px; color: var(--clr-text-muted); font-size: 13px; background: var(--clr-surface); border-radius: var(--r-md); border: 1px dashed var(--clr-border);">
+          ${lq ? 'No judgments matching your search.' : 'No judgments found in the archive.'}
+        </div>`;
+      return;
+    }
+
+    listEl.innerHTML = cases.map(c => {
+      const badgeClass = c.court === 'SU Court' ? 'badge-su' : (c.court === 'LSS Court' ? 'badge-lss' : (c.court === 'Conventional Court' ? 'badge-conventional' : ''));
+      const safeFilename = escapeHtml(c.id || c.filename || '');
+      const safeTitle = escapeHtml(c.title || 'Untitled Case').replace(/'/g, "\\'");
+
+      return `
+        <div class="admin-case-item" style="display: flex; align-items: center; justify-content: space-between; background: var(--clr-surface); padding: 10px 14px; border-radius: var(--r-md); border: 1px solid var(--clr-border); gap: 10px;">
+          <div style="flex: 1; min-width: 0;">
+            <div style="font-weight: 600; font-size: 13px; color: var(--clr-text-h); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="${escapeHtml(c.title)}">
+              ${escapeHtml(c.title)}
+            </div>
+            <div style="font-size: 11px; color: var(--clr-text-muted); display: flex; align-items: center; gap: 6px; margin-top: 3px;">
+              <span class="case-court-badge ${badgeClass}" style="font-size: 9px; padding: 2px 6px;">${escapeHtml(c.court || 'SU Court')}</span>
+              <span style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${safeFilename}</span>
+            </div>
+          </div>
+          <button onclick="deleteJudgment('${safeFilename}', '${safeTitle}')" style="background: #fee2e2; color: #dc2626; border: 1px solid #fecaca; padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; flex-shrink: 0; transition: background 0.2s;" onmouseover="this.style.background='#fecaca'" onmouseout="this.style.background='#fee2e2'">
+            🗑️ Delete
+          </button>
+        </div>
+      `;
+    }).join('');
+  }
+
+  // Filter listener
+  const manageSearch = document.getElementById('admin-manage-search');
+  if (manageSearch) {
+    manageSearch.addEventListener('input', (e) => {
+      renderAdminCaseList(e.target.value);
+    });
+  }
+
+  // ── Global Delete Case Handler ──
+  window.deleteJudgment = async function(filename, title) {
+    if (!filename) return;
+    const confirmed = confirm(`Are you sure you want to permanently delete the judgment "${title}" from all users?\n\nThis will remove the judgment file from the repository and database.`);
+    if (!confirmed) return;
+
+    showToast('Deleting judgment...');
+
+    try {
+      const response = await fetch('/api/delete-case.js', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          password: adminPassword || ADMIN_PASSWORD,
+          filename: filename,
+        }),
+      });
+
+      let result;
+      try {
+        result = await response.json();
+      } catch (parseErr) {
+        throw new Error(`Server returned status ${response.status}`);
+      }
+
+      if (response.ok && result.success) {
+        // Remove locally
+        State.cases = State.cases.filter(c => (c.filename !== filename && c.id !== filename));
+        renderLibrary();
+        renderAdminCaseList(manageSearch ? manageSearch.value : '');
+        populateNoteCaseSelect();
+
+        showToast('✅ Judgment deleted successfully!');
+      } else {
+        const errorMsg = result?.error || 'Failed to delete judgment.';
+        showToast('❌ ' + errorMsg);
+      }
+    } catch (err) {
+      console.error('Delete case error:', err);
+      showToast('❌ ' + (err.message || 'Error deleting judgment.'));
+    }
+  };
 
   // ── Helper: show/hide loading state ──
   function setLoading(isLoading) {
@@ -933,6 +1035,7 @@ function initAdmin() {
         };
         State.cases.unshift(newCase);
         renderLibrary();
+        renderAdminCaseList(manageSearch ? manageSearch.value : '');
         populateNoteCaseSelect();
         
         showStatus(result.message || 'Judgment published successfully! All users will see it shortly.', false);
