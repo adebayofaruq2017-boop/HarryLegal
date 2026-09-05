@@ -2,7 +2,7 @@
    LEXCAMPUS — Service Worker (Offline Support)
    ============================================= */
 
-const CACHE_NAME = 'lexcampus-v3';
+const CACHE_NAME = 'lexcampus-v4';
 
 const ASSETS = [
   './',

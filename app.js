@@ -329,27 +329,26 @@ document.querySelectorAll('.chip[data-filter]').forEach(btn => {
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 function renderLibrary() {
   const list = document.getElementById('library-list');
-  const empty = document.getElementById('library-empty');
+  if (!list) return;
   const f = State.currentLibFilter;
 
   const filtered = State.cases.filter(c => f === 'all' || c.court === f);
 
   if (filtered.length === 0) {
-    list.innerHTML = '';
-    list.appendChild(empty);
-    empty.style.display = 'block';
-
     if (State.isIndexing) {
-      empty.innerHTML = `<p>Indexing PDFs...</p>`;
+      list.innerHTML = `
+        <div class="empty-state" id="library-empty">
+          <p>Indexing PDFs...</p>
+        </div>`;
     } else {
-      empty.innerHTML = `
+      list.innerHTML = `
+        <div class="empty-state" id="library-empty">
           <div class="empty-icon">📂</div>
           <p>No cases indexed.</p>
-          <p class="empty-sub">Add PDFs to the <strong>judgments/</strong> folder and run the update script.</p>
-        `;
+          <p class="empty-sub">Add judgments via the Admin panel or import files into the library.</p>
+        </div>`;
     }
   } else {
-    empty.style.display = 'none';
     list.innerHTML = filtered.map(c => buildCaseCard(c)).join('');
   }
 }
@@ -552,16 +551,18 @@ function setTermOfDay() {
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 function renderNotes() {
   const list = document.getElementById('notes-list');
-  const empty = document.getElementById('notes-empty');
+  if (!list) return;
 
   if (State.notes.length === 0) {
-    list.innerHTML = '';
-    list.appendChild(empty);
-    empty.style.display = 'block';
+    list.innerHTML = `
+      <div class="empty-state" id="notes-empty">
+        <div class="empty-icon">🗒️</div>
+        <p>No notes yet.</p>
+        <p class="empty-sub">Tap <strong>+ New Note</strong> to start.</p>
+      </div>`;
     return;
   }
 
-  empty.style.display = 'none';
   const sorted = [...State.notes].sort((a, b) => (b.updatedAt || b.createdAt) - (a.updatedAt || a.createdAt));
 
   list.innerHTML = sorted.map(n => {
@@ -852,8 +853,10 @@ function initAdmin() {
   loginSubmit.addEventListener('click', () => {
     if (passwordInput.value === ADMIN_PASSWORD) {
       adminPassword = passwordInput.value;
-      document.getElementById('admin-login-container').style.display = 'none';
-      document.getElementById('admin-form-container').style.display = 'block';
+      const loginBox = document.getElementById('admin-login-container');
+      const formBox = document.getElementById('admin-form-container');
+      if (loginBox) loginBox.style.display = 'none';
+      if (formBox) formBox.style.display = 'block';
       showToast('Admin access granted.');
       passwordInput.value = '';
     } else {
@@ -865,13 +868,14 @@ function initAdmin() {
   function setLoading(isLoading) {
     const submitText = document.getElementById('admin-submit-text');
     const spinner = document.getElementById('admin-submit-spinner');
-    formSubmit.disabled = isLoading;
-    submitText.textContent = isLoading ? 'Publishing...' : 'Publish to All Users';
-    spinner.style.display = isLoading ? 'inline' : 'none';
+    if (formSubmit) formSubmit.disabled = isLoading;
+    if (submitText) submitText.textContent = isLoading ? 'Publishing...' : 'Publish to All Users';
+    if (spinner) spinner.style.display = isLoading ? 'inline' : 'none';
   }
 
   function showStatus(message, isError) {
     const statusEl = document.getElementById('admin-status-msg');
+    if (!statusEl) return;
     statusEl.textContent = message;
     statusEl.style.display = 'block';
     statusEl.style.background = isError ? '#fef2f2' : '#f0fdf4';
@@ -881,9 +885,12 @@ function initAdmin() {
 
   // ── Submit case to API ──
   formSubmit.addEventListener('click', async () => {
-    const title = document.getElementById('admin-case-title').value.trim();
-    const court = document.getElementById('admin-case-court').value;
-    const content = document.getElementById('admin-case-content').value.trim();
+    const titleEl = document.getElementById('admin-case-title');
+    const courtEl = document.getElementById('admin-case-court');
+    const contentEl = document.getElementById('admin-case-content');
+    const title = titleEl ? titleEl.value.trim() : '';
+    const court = courtEl ? courtEl.value : 'SU Court';
+    const content = contentEl ? contentEl.value.trim() : '';
     
     if (!title || !content) {
       showToast('Title and content are required.');
@@ -891,7 +898,8 @@ function initAdmin() {
     }
     
     setLoading(true);
-    document.getElementById('admin-status-msg').style.display = 'none';
+    const statusMsg = document.getElementById('admin-status-msg');
+    if (statusMsg) statusMsg.style.display = 'none';
 
     try {
       const response = await fetch('/api/add-case.js', {
