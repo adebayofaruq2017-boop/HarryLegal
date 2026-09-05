@@ -1,5 +1,12 @@
 const CASES = [
   {
+    "filename": "JOH_V_DAPO.txt",
+    "title": "joh v dapo",
+    "court": "SU Court",
+    "path": "judgments/JOH_V_DAPO.txt",
+    "rawText": "I write to express my interest in undertaking an internship with the Federal Ministry of Communications, Innovation & Digital Economy. I am a graduating Bachelor of Laws (LL.B) student of the University of Ilorin, studying Common and Islamic Law, with a strong interest in technology law, artificial intelligence, digital rights, innovation policy and the regulation of emerging technologies.\nMy academic and professional experiences have increasingly focused on the relationship between law and technology. I have undertaken legal research on artificial intelligence, privacy, digital surveillance and human rights. These experiences have strengthened my interest in the legal and policy frameworks required to promote innovation while ensuring accountability, responsible technology use and the protection of citizens’ rights.\nI have also developed practical experience in technology and legal innovation. I built LEXCAMPUS, a legal-tech web application designed to improve access to legal resources and support student legal research, and contributed to Report Right NG, a public-interest digital platform promoting rights awareness, structured issue reporting and responsible digital civic engagement. My professional experience further combines legal research with technology through my work as a Legal Research Assistant, a technology-law intern at MetaLex Legal, and Tech Support Intern.\nI am particularly interested in gaining practical exposure to the Ministry’s work in digital policy, innovation, e-government, technology regulation and research. I would welcome the opportunity"
+  },
+  {
     "filename": "VERIFICATION_TEST_CASE.txt",
     "title": "Verification Test Case",
     "court": "Conventional Court",
