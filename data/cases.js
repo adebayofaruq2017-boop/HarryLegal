@@ -1,12 +1,5 @@
 const CASES = [
   {
-    "filename": "JOHN_V_DOE.txt",
-    "title": "John v Doe",
-    "court": "LSS Court",
-    "path": "judgments/JOHN_V_DOE.txt",
-    "rawText": "Cannot read properties of null (reading 'style')"
-  },
-  {
     "filename": "JOH_V_DAPO.txt",
     "title": "joh v dapo",
     "court": "SU Court",
