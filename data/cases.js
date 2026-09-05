@@ -1,5 +1,12 @@
 const CASES = [
   {
+    "filename": "VERIFICATION_TEST_CASE.txt",
+    "title": "Verification Test Case",
+    "court": "Conventional Court",
+    "path": "judgments/VERIFICATION_TEST_CASE.txt",
+    "rawText": "This is a verification test to confirm everything works without any errors."
+  },
+  {
     "filename": "ADEDEJI_v_FACULTY_OF_ARTS_PRESIDENT.txt",
     "title": "ADEDEJI v FACULTY OF ARTS PRESIDENT",
     "path": "judgments/ADEDEJI_v_FACULTY_OF_ARTS_PRESIDENT.txt",
