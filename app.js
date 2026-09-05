@@ -274,8 +274,8 @@ clearBtn.addEventListener('click', () => {
 });
 
 function showSearchEmpty() {
-  resultsWrap.style.display = 'none';
-  featureCards.style.display = 'flex';
+  if (resultsWrap) resultsWrap.style.display = 'none';
+  if (featureCards) featureCards.style.display = 'flex';
 }
 
 function runSearch(q) {
@@ -283,10 +283,10 @@ function runSearch(q) {
   const filter = State.currentFilter;
 
   if (State.isIndexing) {
-    resultsWrap.style.display = 'block';
-    featureCards.style.display = 'none';
-    resultsCount.textContent = 'Indexing in progress...';
-    resultsList.innerHTML = '<p style="color:var(--clr-text-muted); font-size: 13px;">Please wait while cases are being scanned.</p>';
+    if (resultsWrap) resultsWrap.style.display = 'block';
+    if (featureCards) featureCards.style.display = 'none';
+    if (resultsCount) resultsCount.textContent = 'Indexing in progress...';
+    if (resultsList) resultsList.innerHTML = '<p style="color:var(--clr-text-muted); font-size: 13px;">Please wait while cases are being scanned.</p>';
     return;
   }
 
@@ -298,10 +298,10 @@ function runSearch(q) {
     return matchCourt && matchQuery;
   });
 
-  featureCards.style.display = 'none';
-  resultsWrap.style.display = 'block';
-  resultsCount.textContent = `${hits.length} result${hits.length !== 1 ? 's' : ''}`;
-  resultsQuery.textContent = `for "${q}"`;
+  if (featureCards) featureCards.style.display = 'none';
+  if (resultsWrap) resultsWrap.style.display = 'block';
+  if (resultsCount) resultsCount.textContent = `${hits.length} result${hits.length !== 1 ? 's' : ''}`;
+  if (resultsQuery) resultsQuery.textContent = `for "${q}"`;
 
   if (hits.length === 0) {
     resultsList.innerHTML = `
